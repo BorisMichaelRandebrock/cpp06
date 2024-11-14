@@ -6,7 +6,7 @@
 #    By: brandebr <brandebr@42barcelona.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/13 14:06:58 by brandebr          #+#    #+#              #
-#    Updated: 2024/11/13 14:13:37 by brandebr         ###   ########.fr        #
+#    Updated: 2024/11/14 19:34:23 by brandebr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ OBJ_DIR = obj/
 
 INC_DIR = inc/
 
-HEADERS = $(addprefix $(INC_DIR), ScalarConverter.hpp
+HEADERS = $(addprefix $(INC_DIR), ScalarConverter.hpp)
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.cpp=.o))
 
@@ -53,7 +53,6 @@ clean:
 fclean: clean
 	/bin/rm -rf $(OBJ_DIR)
 	/bin/rm -f $(NAME)
-	/bin/rm -f *_shrubbery 
 	
 re: fclean all
 
