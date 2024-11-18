@@ -6,7 +6,7 @@
 /*   By: brandebr <brandebr@42barcelona.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:15:03 by brandebr          #+#    #+#             */
-/*   Updated: 2024/11/14 19:29:15 by brandebr         ###   ########.fr       */
+/*   Updated: 2024/11/18 12:07:33 by brandebr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <cstdio>
 #include <float.h>
 #include <cmath>
+#include <iomanip>
+#include <sstream>
 
 #define RESET   "\033[0m"
 #define BOLD     "\033[1m"
@@ -29,6 +31,16 @@
 #define BOLD_RED "\033[31m"
 #define GREEN   "\033[32m"
 
+enum	Options {
+	PINFF,
+	NINFF,
+	NANF,
+	PINF,
+	NINF,
+	INAN,
+	DEF,
+	OK
+};
 
 class ScalarConverter {
 	private:
