@@ -6,7 +6,7 @@
 /*   By: brandebr <brandebr@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:56:30 by brandebr          #+#    #+#             */
-/*   Updated: 2024/11/19 13:45:35 by brandebr         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:40:41 by brandebr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,15 +126,15 @@ void ScalarConverter::convert(const std::string &literal) {
 try
 {
 toInt = std::atoi(literal.c_str());
-toDouble = static_cast<double>(toInt);
-toFloat = static_cast<float>(toDouble);
+//toDouble = static_cast<double>(toInt);
+//toFloat = static_cast<float>(toDouble);
 std::cout << "char: " << (toInt >= 32 && toInt <= 126 ? "\033[32m'" + std::string(1, static_cast<char>(toInt)) + "'\033[0m" : "\033[31mNot printable\033[0m") << std::endl;
 }
 catch(const std::exception& e)
 {
 	std::cerr << e.what() << '\n';
 }
-std::cout << "int: " << GREEN << toInt << RESET << std::endl;
+std::cerr << "int: " << GREEN << toInt << RESET << std::endl;
 
 
 	if (literal[literal.length() - 1] == 'f') 
@@ -146,6 +146,23 @@ std::cout << "int: " << GREEN << toInt << RESET << std::endl;
 		toDouble = std::atof(literal.c_str());
 		toFloat = static_cast<float>(toDouble);
 	}
+
+std::string oss;//
+oss = literal;
+//std::string strValue = oss.str();
+
+// Find the decimal point and calculate the precision
+size_t decimalPos = literal.find('.');
+int precision = 1;
+
+if (decimalPos != std::string::npos) {
+    precision = literal.length() - decimalPos - 1;
+} else {
+        precision = 1;
+    }
+// Set the precision based on the calculated value
+
+std::cout  << std::fixed << std::setprecision(precision);
 if (toFloat == static_cast<int>(toFloat)) {
     std::cout << "float: " << GREEN << toFloat << ".0f" << RESET << std::endl;
 } else {
@@ -159,3 +176,141 @@ if (toDouble == static_cast<int>(toDouble)) {
 }
 	return ;
 }
+
+
+/*
+void ScalarConverter::convert(const std::string &literal) {
+    std::string specialTypes[6] = {
+        "+inff", "-inff", "nanf", "+inf", "-inf", "nan"
+    };
+
+    std::string toChar = "";
+    int toInt = 0;
+    float toFloat = 0;
+    double toDouble = 0;
+    bool isSpecial = false;
+
+    for (int i = 0; i < 6; ++i) {
+        if (literal == specialTypes[i]) {
+            isSpecial = true;
+        }
+    }
+
+    if (isSpecial == true) {
+        Options input = stringEnum(literal);
+        switch(input) {
+            case PINFF:
+                std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "float: " << GREEN << "inff" << RESET << std::endl;
+                std::cout << "double: " << GREEN << "inf" << RESET << std::endl;
+                return;
+            case NINFF:
+                std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "float: " << GREEN << "-inff" << RESET << std::endl;
+                std::cout << "double: " << GREEN << "-inf" << RESET << std::endl;
+                return;
+            case NANF:
+                std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "float: " << GREEN << "nanf" << RESET << std::endl;
+                std::cout << "double: " << GREEN << "nan" << RESET << std::endl;
+                return;
+            case PINF:
+                std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "float: " << GREEN << "inff" << RESET << std::endl;
+                std::cout << "double: " << GREEN << "inf" << RESET << std::endl;
+                return;
+            case NINF:
+                std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "float: " << GREEN << "-inff" << RESET << std::endl;
+                std::cout << "double: " << GREEN << "-inf" << RESET << std::endl;
+                return;
+            case INAN:
+                std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+                std::cout << "float: " << GREEN << "nanf" << RESET << std::endl;
+                std::cout << "double: " << GREEN << "nan" << RESET << std::endl;
+                return;
+            default:
+                break;
+        }
+    }
+
+    if (literal.size() == 1 && std::isprint(literal[0]) && !std::isdigit(literal[0])) {
+        toChar = literal[0];
+        std::cout << "char: " << GREEN << toChar << RESET << std::endl;
+        std::cout << "int: " << GREEN << static_cast<int>(toChar[0]) << RESET << std::endl;
+        std::cout << "float: " << GREEN << static_cast<float>(toChar[0]) << ".0f" << RESET << std::endl;
+        std::cout << "double: " << GREEN << static_cast<double>(toChar[0]) << ".0" << RESET << std::endl;
+        return ;
+    }
+
+    if (literal.size() > 1 && std::isprint(literal[1]) && !std::isdigit(literal[1]) && literal[0] >= 'A' && literal[0] <= 'z') {
+        std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+        std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+        std::cout << "float: " << RED << "impossible" << RESET << std::endl;
+        std::cout << "double: " << RED << "impossible" << RESET << std::endl;
+        return ;
+    }
+
+    std::istringstream iss(literal);
+
+    try {
+        toInt = std::atoi(literal.c_str());
+        toDouble = static_cast<double>(toInt);
+        toFloat = static_cast<float>(toDouble);
+
+        std::cout << "char: " << (toInt >= 32 && toInt <= 126 ? "\033[32m'" + std::string(1, static_cast<char>(toInt)) + "'\033[0m" : "\033[31mNot printable\033[0m") << std::endl;
+    }
+    catch(const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
+    std::cout << "int: " << GREEN << toInt << RESET << std::endl;
+
+        std::ostringstream floatStream, doubleStream;
+
+    // For float, ensure no scientific notation
+    if (literal[literal.length() - 1] == 'f') {
+        toFloat = std::atof(literal.c_str());
+        floatStream << std::fixed << toFloat;  // Fixed for no scientific notation
+    } else {
+        toDouble = std::atof(literal.c_str());
+        doubleStream << std::fixed << toDouble;  // Fixed point, no scientific notation
+    }
+
+    std::string floatStr = floatStream.str();
+    std::string doubleStr = doubleStream.str();
+
+    // Strip trailing zeros from float
+    if (floatStr.find('.') != std::string::npos) {
+        floatStr.erase(floatStr.find_last_not_of('0') + 1, std::string::npos);
+    }
+
+    // Ensure float ends with "f"
+    if (floatStr.find('.') == std::string::npos) {
+        floatStr += ".0f";  // For float with no decimals
+    } else {
+        if (floatStr[floatStr.size() - 1] != 'f') {
+            floatStr += "f";  // Ensure it ends with "f"
+        }
+    }
+
+    // Strip trailing zeros from double
+    if (doubleStr.find('.') != std::string::npos) {
+        doubleStr.erase(doubleStr.find_last_not_of('0') + 1, std::string::npos);
+    }
+
+    // Ensure double ends with "."
+    if (doubleStr.find('.') == std::string::npos) {
+        doubleStr += ".0";  // For double with no decimals
+    }
+
+    std::cout << "float: " << GREEN << floatStr << RESET << std::endl;
+    std::cout << "double: " << GREEN << doubleStr << RESET << std::endl;
+    return ;
+}
+*/
