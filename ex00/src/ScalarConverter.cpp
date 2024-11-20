@@ -6,12 +6,12 @@
 /*   By: brandebr <brandebr@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:56:30 by brandebr          #+#    #+#             */
-/*   Updated: 2024/11/20 12:33:21 by brandebr         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:42:10 by brandebr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
-
+#include <limits>
 ScalarConverter::ScalarConverter() {}
 
 ScalarConverter::ScalarConverter(const ScalarConverter &cpy) {
@@ -86,8 +86,8 @@ void ScalarConverter::convert(const std::string &literal) {
 			case PINFF:
 				std::cout << "char: " << RED << "impossible" << RESET << std::endl;
 				std::cout << "int: " << RED << "impossible" << RESET << std::endl;
-				std::cout << "float: " << GREEN << "inff" << RESET << std::endl;
-				std::cout << "double: " << GREEN << "inf" << RESET << std::endl;
+				std::cout << "float: " << GREEN << "+inff" << RESET << std::endl;
+				std::cout << "double: " << GREEN << "+inf" << RESET << std::endl;
 				return;
 			case NINFF:
 				std::cout << "char: " << RED << "impossible" << RESET << std::endl;
@@ -104,8 +104,8 @@ void ScalarConverter::convert(const std::string &literal) {
 			case PINF:
 				std::cout << "char: " << RED << "impossible" << RESET << std::endl;
 				std::cout << "int: " << RED << "impossible" << RESET << std::endl;
-				std::cout << "float: " << GREEN << "inff" << RESET << std::endl;
-				std::cout << "double: " << GREEN << "inf" << RESET << std::endl;
+				std::cout << "float: " << GREEN << "+inff" << RESET << std::endl;
+				std::cout << "double: " << GREEN << "+inf" << RESET << std::endl;
 				return;
 			case NINF:
 				std::cout << "char: " << RED << "impossible" << RESET << std::endl;
@@ -156,7 +156,7 @@ try
 {
 toInt = std::atoi(literal.c_str());
 
-std::cout << "char: " << (toInt >= 32 && toInt <= 126 ? "\033[32m'" + std::string(1, static_cast<char>(toInt)) + "'\033[0m" : "\033[31mNot printable\033[0m") << std::endl;
+std::cout << "char: " << (toInt > 32 && toInt <= 126 ? "\033[32m'" + std::string(1, static_cast<char>(toInt)) + "'\033[0m" : "\033[31mNot printable\033[0m") << std::endl;
 }
 catch(const std::exception& e)
 {
@@ -174,11 +174,7 @@ bool isNegative = (literal[0] == '-');
 if (literal.size() > (isNegative ? minIntStr.size() : maxIntStr.size()) ||
     (!isNegative && literal.size() == maxIntStr.size() && literal > maxIntStr) ||
     (isNegative && literal.size() == minIntStr.size() && literal < minIntStr)) {
-  //  std::cout << "char: " << RED << "Not printable" << RESET << std::endl;
     std::cout << "int: " << RED << "impossible" << RESET << std::endl;
-    /*std::cout << "float: " << RED << "impossible" << RESET << std::endl;
-    std::cout << "double: " << RED << "impossible" << RESET << std::endl;
-    return;*/
 } else 
     std::cerr << "int: " << GREEN << toInt << RESET << std::endl;
 
@@ -192,7 +188,7 @@ if (literal.size() > (isNegative ? minIntStr.size() : maxIntStr.size()) ||
 		toDouble = std::atof(literal.c_str());
 		toFloat = static_cast<float>(toDouble);
 	}
-
+    
 std::string oss;
 oss = literal;
 
@@ -202,22 +198,18 @@ int precision = 0;
 if (decimalPos != std::string::npos) {
     precision = literal.length() - decimalPos - 1;
 }
-/*else {
-        precision = 1;
-    }
-*/
 
 std::cout  << std::fixed << std::setprecision(precision);
 if (toFloat == static_cast<int>(toFloat)) {
-    std::cout << "float: " << GREEN << toFloat << ".0f" << RESET << std::endl;
+    std::cout << "float: " << GREEN << static_cast<int>(toFloat) << ".0f" << RESET << std::endl;
 } else {
-    std::cout << "float: " << GREEN << toFloat << "f" << RESET << std::endl;
+    std::cout << "float: " << GREEN << std::setprecision(3) << toFloat << "f" << RESET << std::endl;
 }
 
 if (toDouble == static_cast<int>(toDouble)) {
-    std::cout << "double: " << GREEN << toDouble << ".0" << RESET << std::endl;
+    std::cout << "double: " << GREEN << static_cast<int>(toDouble) << ".0" << RESET << std::endl;
 } else {
-    std::cout << "double: " << GREEN << toDouble << RESET << std::endl;
+    std::cout << "double: " << GREEN << std::setprecision(3) << toDouble << RESET << std::endl;
 }
 	return ;
 }
