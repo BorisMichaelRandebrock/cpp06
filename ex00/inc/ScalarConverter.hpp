@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ScalarConverter.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: brandebr <brandebr@42barcelona.com>        +#+  +:+       +#+        */
+/*   By: brandebr <brandebr@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:15:03 by brandebr          #+#    #+#             */
-/*   Updated: 2024/11/18 12:07:33 by brandebr         ###   ########.fr       */
+/*   Updated: 2024/11/20 12:08:58 by brandebr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <cstdlib>
 #include <cctype>
 #include <climits>
+#include <limits>
 #include <cstdio>
 #include <float.h>
 #include <cmath>

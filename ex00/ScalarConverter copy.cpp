@@ -6,7 +6,7 @@
 /*   By: brandebr <brandebr@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:56:30 by brandebr          #+#    #+#             */
-/*   Updated: 2024/11/20 12:33:21 by brandebr         ###   ########.fr       */
+/*   Updated: 2024/11/20 11:25:51 by brandebr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,6 @@ Options stringEnum(const std::string &input) {
 	else return OK; 
 }
 
-bool isValidNumber(const std::string& literal) {
-  if (literal.empty()) {
-        return false;
-    }
-    size_t i = 0;
-    bool hasDecimal = false;
-    bool hasDigit = false;
-    bool hasF = false;
-
-    if (literal[i] == '+' || literal[i] == '-') {
-        ++i;
-    }
-    for (; i < literal.size(); ++i) {
-        if (std::isdigit(literal[i])) {
-            hasDigit = true;
-        } else if (literal[i] == '.' && !hasDecimal) {
-            hasDecimal = true;
-        } else if (literal[i] == 'f' && i == literal.size() - 1 && !hasF) {
-            hasF = true;
-        } else {
-            return false;
-        }
-    }
-    return hasDigit;
-}
-
 void ScalarConverter::convert(const std::string &literal) {
 	std::string specialTypes[6] = {
 		"+inff", "-inff", "nanf", "+inf", "-inf", "nan"
@@ -78,7 +52,6 @@ void ScalarConverter::convert(const std::string &literal) {
 			isSpecial = true;
 		}
 	}
-
 
 	if (isSpecial == true) {
 		Options input = stringEnum(literal);
@@ -133,14 +106,14 @@ void ScalarConverter::convert(const std::string &literal) {
 		return ;
 	}
 
-    if (!isValidNumber(literal)) {
-        std::cout << "char: " << RED << "impossible" << RESET << std::endl;
-        std::cout << "int: " << RED << "impossible" << RESET << std::endl;
-        std::cout << "float: " << RED << "impossible" << RESET << std::endl;
-        std::cout << "double: " << RED << "impossible" << RESET << std::endl;
-        return;
-    }
-    
+	if (literal.size() > 1 && std::isprint(literal[1]) && !std::isdigit(literal[1]) && literal[0] >= 'A' && literal[0] <= 'z') {
+		std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+		std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+		std::cout << "float: " << RED << "impossible" << RESET << std::endl;
+		std::cout << "double: " << RED << "impossible" << RESET << std::endl;
+		return ;
+	}
+	
 	std::istringstream iss(literal);
 
 	if (toChar == "" && (toInt > 31 && toInt < 127)) {
@@ -150,8 +123,6 @@ void ScalarConverter::convert(const std::string &literal) {
 	} 
 	else if (toChar == "")
 		toChar = "Not printable";
-
-
 try
 {
 toInt = std::atoi(literal.c_str());
@@ -162,25 +133,7 @@ catch(const std::exception& e)
 {
 	std::cerr << e.what() << '\n';
 }
-std::ostringstream maxIntStream;
-maxIntStream << std::numeric_limits<int>::max();
-std::string maxIntStr = maxIntStream.str();
-
-std::ostringstream minIntStream;
-minIntStream << std::numeric_limits<int>::min();
-std::string minIntStr = minIntStream.str();
-
-bool isNegative = (literal[0] == '-');
-if (literal.size() > (isNegative ? minIntStr.size() : maxIntStr.size()) ||
-    (!isNegative && literal.size() == maxIntStr.size() && literal > maxIntStr) ||
-    (isNegative && literal.size() == minIntStr.size() && literal < minIntStr)) {
-  //  std::cout << "char: " << RED << "Not printable" << RESET << std::endl;
-    std::cout << "int: " << RED << "impossible" << RESET << std::endl;
-    /*std::cout << "float: " << RED << "impossible" << RESET << std::endl;
-    std::cout << "double: " << RED << "impossible" << RESET << std::endl;
-    return;*/
-} else 
-    std::cerr << "int: " << GREEN << toInt << RESET << std::endl;
+std::cerr << "int: " << GREEN << toInt << RESET << std::endl;
 
 
 	if (literal[literal.length() - 1] == 'f') 
@@ -197,15 +150,14 @@ std::string oss;
 oss = literal;
 
 size_t decimalPos = literal.find('.');
-int precision = 0;
+int precision = 1;
 
 if (decimalPos != std::string::npos) {
     precision = literal.length() - decimalPos - 1;
-}
-/*else {
+} else {
         precision = 1;
     }
-*/
+
 
 std::cout  << std::fixed << std::setprecision(precision);
 if (toFloat == static_cast<int>(toFloat)) {

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScalarConverter.cpp                                :+:      :+:    :+:   */
+/*   ScalarConverter copy2.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brandebr <brandebr@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:56:30 by brandebr          #+#    #+#             */
-/*   Updated: 2024/11/20 12:33:21 by brandebr         ###   ########.fr       */
+/*   Updated: 2024/11/20 12:09:36 by brandebr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,6 @@ Options stringEnum(const std::string &input) {
 	else return OK; 
 }
 
-bool isValidNumber(const std::string& literal) {
-  if (literal.empty()) {
-        return false;
-    }
-    size_t i = 0;
-    bool hasDecimal = false;
-    bool hasDigit = false;
-    bool hasF = false;
-
-    if (literal[i] == '+' || literal[i] == '-') {
-        ++i;
-    }
-    for (; i < literal.size(); ++i) {
-        if (std::isdigit(literal[i])) {
-            hasDigit = true;
-        } else if (literal[i] == '.' && !hasDecimal) {
-            hasDecimal = true;
-        } else if (literal[i] == 'f' && i == literal.size() - 1 && !hasF) {
-            hasF = true;
-        } else {
-            return false;
-        }
-    }
-    return hasDigit;
-}
-
 void ScalarConverter::convert(const std::string &literal) {
 	std::string specialTypes[6] = {
 		"+inff", "-inff", "nanf", "+inf", "-inf", "nan"
@@ -78,7 +52,6 @@ void ScalarConverter::convert(const std::string &literal) {
 			isSpecial = true;
 		}
 	}
-
 
 	if (isSpecial == true) {
 		Options input = stringEnum(literal);
@@ -133,14 +106,14 @@ void ScalarConverter::convert(const std::string &literal) {
 		return ;
 	}
 
-    if (!isValidNumber(literal)) {
-        std::cout << "char: " << RED << "impossible" << RESET << std::endl;
-        std::cout << "int: " << RED << "impossible" << RESET << std::endl;
-        std::cout << "float: " << RED << "impossible" << RESET << std::endl;
-        std::cout << "double: " << RED << "impossible" << RESET << std::endl;
-        return;
-    }
-    
+	if (literal.size() > 1 && std::isprint(literal[1]) && !std::isdigit(literal[1]) && literal[0] >= 'A' && literal[0] <= 'z') {
+		std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+		std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+		std::cout << "float: " << RED << "impossible" << RESET << std::endl;
+		std::cout << "double: " << RED << "impossible" << RESET << std::endl;
+		return ;
+	}
+	
 	std::istringstream iss(literal);
 
 	if (toChar == "" && (toInt > 31 && toInt < 127)) {
