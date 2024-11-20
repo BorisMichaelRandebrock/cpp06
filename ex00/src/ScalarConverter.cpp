@@ -6,7 +6,7 @@
 /*   By: brandebr <brandebr@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 16:56:30 by brandebr          #+#    #+#             */
-/*   Updated: 2024/11/20 14:42:10 by brandebr         ###   ########.fr       */
+/*   Updated: 2024/11/20 15:29:17 by brandebr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,29 @@ Options stringEnum(const std::string &input) {
 }
 
 bool isValidNumber(const std::string& literal) {
-  if (literal.empty()) {
-        return false;
-    }
-    size_t i = 0;
-    bool hasDecimal = false;
-    bool hasDigit = false;
-    bool hasF = false;
+	if (literal.empty()) {
+		return false;
+	}
+	size_t i = 0;
+	bool hasDecimal = false;
+	bool hasDigit = false;
+	bool hasF = false;
 
-    if (literal[i] == '+' || literal[i] == '-') {
-        ++i;
-    }
-    for (; i < literal.size(); ++i) {
-        if (std::isdigit(literal[i])) {
-            hasDigit = true;
-        } else if (literal[i] == '.' && !hasDecimal) {
-            hasDecimal = true;
-        } else if (literal[i] == 'f' && i == literal.size() - 1 && !hasF) {
-            hasF = true;
-        } else {
-            return false;
-        }
-    }
-    return hasDigit;
+	if (literal[i] == '+' || literal[i] == '-') {
+		++i;
+	}
+	for (; i < literal.size(); ++i) {
+		if (std::isdigit(literal[i])) {
+			hasDigit = true;
+		} else if (literal[i] == '.' && !hasDecimal) {
+			hasDecimal = true;
+		} else if (literal[i] == 'f' && i == literal.size() - 1 && !hasF) {
+			hasF = true;
+		} else {
+			return false;
+		}
+	}
+	return hasDigit;
 }
 
 void ScalarConverter::convert(const std::string &literal) {
@@ -133,14 +133,14 @@ void ScalarConverter::convert(const std::string &literal) {
 		return ;
 	}
 
-    if (!isValidNumber(literal)) {
-        std::cout << "char: " << RED << "impossible" << RESET << std::endl;
-        std::cout << "int: " << RED << "impossible" << RESET << std::endl;
-        std::cout << "float: " << RED << "impossible" << RESET << std::endl;
-        std::cout << "double: " << RED << "impossible" << RESET << std::endl;
-        return;
-    }
-    
+	if (!isValidNumber(literal)) {
+		std::cout << "char: " << RED << "impossible" << RESET << std::endl;
+		std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+		std::cout << "float: " << RED << "impossible" << RESET << std::endl;
+		std::cout << "double: " << RED << "impossible" << RESET << std::endl;
+		return;
+	}
+
 	std::istringstream iss(literal);
 
 	if (toChar == "" && (toInt > 31 && toInt < 127)) {
@@ -152,31 +152,31 @@ void ScalarConverter::convert(const std::string &literal) {
 		toChar = "Not printable";
 
 
-try
-{
-toInt = std::atoi(literal.c_str());
+	try
+	{
+		toInt = std::atoi(literal.c_str());
 
-std::cout << "char: " << (toInt > 32 && toInt <= 126 ? "\033[32m'" + std::string(1, static_cast<char>(toInt)) + "'\033[0m" : "\033[31mNot printable\033[0m") << std::endl;
-}
-catch(const std::exception& e)
-{
-	std::cerr << e.what() << '\n';
-}
-std::ostringstream maxIntStream;
-maxIntStream << std::numeric_limits<int>::max();
-std::string maxIntStr = maxIntStream.str();
+		std::cout << "char: " << (toInt > 32 && toInt <= 126 ? "\033[32m'" + std::string(1, static_cast<char>(toInt)) + "'\033[0m" : "\033[31mNot printable\033[0m") << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	std::ostringstream maxIntStream;
+	maxIntStream << std::numeric_limits<int>::max();
+	std::string maxIntStr = maxIntStream.str();
 
-std::ostringstream minIntStream;
-minIntStream << std::numeric_limits<int>::min();
-std::string minIntStr = minIntStream.str();
+	std::ostringstream minIntStream;
+	minIntStream << std::numeric_limits<int>::min();
+	std::string minIntStr = minIntStream.str();
 
-bool isNegative = (literal[0] == '-');
-if (literal.size() > (isNegative ? minIntStr.size() : maxIntStr.size()) ||
-    (!isNegative && literal.size() == maxIntStr.size() && literal > maxIntStr) ||
-    (isNegative && literal.size() == minIntStr.size() && literal < minIntStr)) {
-    std::cout << "int: " << RED << "impossible" << RESET << std::endl;
-} else 
-    std::cerr << "int: " << GREEN << toInt << RESET << std::endl;
+	bool isNegative = (literal[0] == '-');
+	if (literal.size() > (isNegative ? minIntStr.size() : maxIntStr.size()) ||
+			(!isNegative && literal.size() == maxIntStr.size() && literal > maxIntStr) ||
+			(isNegative && literal.size() == minIntStr.size() && literal < minIntStr)) {
+		std::cout << "int: " << RED << "impossible" << RESET << std::endl;
+	} else 
+		std::cerr << "int: " << GREEN << toInt << RESET << std::endl;
 
 
 	if (literal[literal.length() - 1] == 'f') 
@@ -188,28 +188,28 @@ if (literal.size() > (isNegative ? minIntStr.size() : maxIntStr.size()) ||
 		toDouble = std::atof(literal.c_str());
 		toFloat = static_cast<float>(toDouble);
 	}
-    
-std::string oss;
-oss = literal;
 
-size_t decimalPos = literal.find('.');
-int precision = 0;
+	std::string oss;
+	oss = literal;
 
-if (decimalPos != std::string::npos) {
-    precision = literal.length() - decimalPos - 1;
-}
+	size_t decimalPos = literal.find('.');
+	int precision = 0;
 
-std::cout  << std::fixed << std::setprecision(precision);
-if (toFloat == static_cast<int>(toFloat)) {
-    std::cout << "float: " << GREEN << static_cast<int>(toFloat) << ".0f" << RESET << std::endl;
-} else {
-    std::cout << "float: " << GREEN << std::setprecision(3) << toFloat << "f" << RESET << std::endl;
-}
+	if (decimalPos != std::string::npos) {
+		precision = literal.length() - decimalPos - 1;
+	}
 
-if (toDouble == static_cast<int>(toDouble)) {
-    std::cout << "double: " << GREEN << static_cast<int>(toDouble) << ".0" << RESET << std::endl;
-} else {
-    std::cout << "double: " << GREEN << std::setprecision(3) << toDouble << RESET << std::endl;
-}
+	std::cout  << std::fixed << std::setprecision(precision);
+	if (toFloat == static_cast<int>(toFloat)) {
+		std::cout << "float: " << GREEN << static_cast<int>(toFloat) << ".0f" << RESET << std::endl;
+	} else {
+		std::cout << "float: " << GREEN << std::setprecision(3) << toFloat << "f" << RESET << std::endl;
+	}
+
+	if (toDouble == static_cast<int>(toDouble)) {
+		std::cout << "double: " << GREEN << static_cast<int>(toDouble) << ".0" << RESET << std::endl;
+	} else {
+		std::cout << "double: " << GREEN << std::setprecision(3) << toDouble << RESET << std::endl;
+	}
 	return ;
 }

@@ -6,15 +6,15 @@
 #    By: brandebr <brandebr@student.42barcel>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/13 14:06:58 by brandebr          #+#    #+#              #
-#    Updated: 2024/11/20 15:27:08 by brandebr         ###   ########.fr        #
+#    Updated: 2024/11/20 16:27:11 by brandebr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 
 
-NAME = Convert 
+NAME =  Serializer
 
-SRC = main.cpp ScalarConverter.cpp 
+SRC = main.cpp  Serializer.cpp 
 
 SRC_P = src/
 
@@ -22,7 +22,7 @@ OBJ_DIR = obj/
 
 INC_DIR = inc/
 
-HEADERS = $(addprefix $(INC_DIR), ScalarConverter.hpp)
+HEADERS = $(addprefix $(INC_DIR),  Serializer.hpp)
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.cpp=.o))
 
